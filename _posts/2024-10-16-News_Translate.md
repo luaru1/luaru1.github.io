@@ -1,6 +1,6 @@
 ---
 title: <뉴스 번역> 프라이버시 유출에 취약한 '익명' 유전체 데이터베이스
-date: YYYY-MM-DD HH:MM:SS +09:00
+date: 2024-10-18
 categories: [영어 공부, 뉴스 번역]
 tags: [News, Nature]
 description: 개인 데이터와 공공 데이터를 연결하는 과정에서 개인의 건강 정보가 노출될 수 있다.
