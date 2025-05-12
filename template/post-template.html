@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+
+    <link rel="icon" href="/assets/images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="/assets/images/favicon/site.webmanifest">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+      fetch("/assets/components/sidebar.html")
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("sidebar-container").innerHTML = html;
+        });
+    </script>
+  </head>
+  <body>
+    <div class="layout">
+      <div id="sidebar-container"></div>
+      <main class="content">
+        <h1>${title}</h1>
+        <p class="post-date">${date}</p>
+        ${content}
+      </main>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 Luaru1. Powered by GitHub Pages.</p>
+    </footer>
+
+    <script>
+      document.querySelectorAll('.codehilite').forEach(block => {
+        const button = document.createElement('button');
+        button.innerText = '복사';
+        button.className = 'copy-button';
+        button.onclick = () => {
+          const code = block.innerText;
+          navigator.clipboard.writeText(code);
+          button.innerText = '복사됨!';
+          setTimeout(() => button.innerText = '복사', 1500);
+        };
+        block.style.position = 'relative';
+        button.style.position = 'absolute';
+        button.style.top = '0.5rem';
+        button.style.right = '0.5rem';
+        block.appendChild(button);
+      });
+
+      document.querySelectorAll('.toc a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          const target = document.getElementById(targetId);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+            history.pushState(null, '', window.location.pathname + '#' + targetId);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
