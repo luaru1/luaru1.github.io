@@ -38,7 +38,7 @@ def generate_tag_pages():
     OUTPUT_DIR.mkdir(exist_ok=True)
 
     cards = "\n".join(
-        card_tpl.substitute(type='tags', name=tag, count=len(posts))
+        card_tpl.substitute(name=tag, count=len(posts))
         for tag, posts in sorted(tags.items(), key=lambda x: len(x[1]), reverse=True)
     )
 
@@ -65,11 +65,11 @@ def generate_tag_pages():
 
             post_html = "\n".join(
                 post_tpl.substitute(
-                    url=p["url"],
-                    title=p["title"],
-                    date=p["date"].strftime("%Y-%m-%d")
+                    url=post["url"],
+                    title=post["title"],
+                    date=post["date"].strftime("%Y-%m-%d")
                 )
-                for p in page_posts
+                for post in page_posts
             )
 
             pagination = generate_pagination_links(page, total_pages, f"/tags/{tag}")
@@ -77,7 +77,7 @@ def generate_tag_pages():
 
             final_html = base_tpl.substitute(
                 title=f"{tag} | 태그",
-                heading=f"#{tag}",
+                heading=f"# {tag}",
                 content=grid_html
             )
 

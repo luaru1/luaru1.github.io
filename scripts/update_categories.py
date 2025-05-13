@@ -37,7 +37,7 @@ def generate_category_pages():
     OUTPUT_DIR.mkdir(exist_ok=True)
 
     cards = "\n".join(
-        card_tpl.substitute(type='categories', name=cat, count=len(posts))
+        card_tpl.substitute(name=cat, count=len(posts))
         for cat, posts in sorted(categories.items(), key=lambda x: len(x[1]), reverse=True)
     )
 
