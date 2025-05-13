@@ -1,38 +1,16 @@
-import yaml
 from pathlib import Path
-import datetime
 from string import Template
 from collections import defaultdict
-from utils.pagination import paginate  # 유틸 함수
+from utils.pagination import paginate, generate_pagination_links
+from utils.metadata import extract_metadata
 
 POSTS_DIR = Path("posts")
 OUTPUT_DIR = Path("categories")
-INDEX_TEMPLATE_FILE = Path("template/category-card-template.html")
+INDEX_TEMPLATE = Path("template/card-item-template.html")
 BASE_TEMPLATE = Path("template/base-page-template.html")
-GRID_TEMPLATE = Path("template/grid-with-pagination-template.html")
+GRID_TEMPLATE = Path("template/card-grid-pagination-template.html")
 CARD_TEMPLATE = Path("template/card-item-wide-template.html")
 PER_PAGE = 10
-
-def extract_metadata(md_file):
-    with open(md_file, encoding="utf-8") as f:
-        lines = f.readlines()
-    if lines[0].strip() == "---":
-        end_idx = lines[1:].index("---\n") + 1
-        meta = yaml.safe_load("".join(lines[1:end_idx]))
-        raw_date = meta.get("date", "1900-01-01")
-        if isinstance(raw_date, datetime.datetime):
-            parsed_date = raw_date
-        elif isinstance(raw_date, datetime.date):
-            parsed_date = datetime.datetime.combine(raw_date, datetime.datetime.min.time())
-        else:
-            parsed_date = datetime.datetime.strptime(str(raw_date), "%Y-%m-%d")
-        return {
-            "title": meta.get("title", md_file.stem),
-            "date": parsed_date,
-            "category": meta.get("category", md_file.parent.name),
-            "slug": md_file.stem
-        }
-    return None
 
 def generate_category_pages():
     categories = defaultdict(list)
@@ -51,7 +29,7 @@ def generate_category_pages():
                 })
 
     # 카테고리 인덱스 페이지 생성
-    with open(INDEX_TEMPLATE_FILE, encoding="utf-8") as f:
+    with open(INDEX_TEMPLATE, encoding="utf-8") as f:
         card_tpl = Template(f.read())
     with open(BASE_TEMPLATE, encoding="utf-8") as f:
         base_tpl = Template(f.read())
@@ -59,7 +37,7 @@ def generate_category_pages():
     OUTPUT_DIR.mkdir(exist_ok=True)
 
     cards = "\n".join(
-        card_tpl.substitute(name=cat, count=len(posts))
+        card_tpl.substitute(type='categories', name=cat, count=len(posts))
         for cat, posts in sorted(categories.items(), key=lambda x: len(x[1]), reverse=True)
     )
 
@@ -106,13 +84,3 @@ def generate_category_pages():
             (OUTPUT_DIR / filename).write_text(final_html, encoding="utf-8")
 
     print(f"카테고리 페이지 생성 완료: {len(categories)}개 카테고리")
-
-def generate_pagination_links(current_page, total_pages, base_path):
-    links = []
-    for i in range(1, total_pages + 1):
-        if i == current_page:
-            links.append(f'<span class="current">{i}</span>')
-        else:
-            url = f"{base_path}.html" if i == 1 else f"{base_path}-{i}.html"
-            links.append(f'<a href="{url}">{i}</a>')
-    return '<div class="pagination">\n' + "\n".join(links) + '\n</div>'

@@ -18,18 +18,21 @@
       <main class="content">
         <h1>태그</h1>
         <div class="card-container">
-<a href="/tags/유전체.html" class="card card-link">
-  <h3>#유전체</h3>
-  <span class="count">1 posts</span>
+<a href="tags/유전체" class="card card-link">
+  <h3>유전체</h3>
+  <span class="post-date">1</span>
 </a>
-<a href="/tags/개인정보.html" class="card card-link">
-  <h3>#개인정보</h3>
-  <span class="count">1 posts</span>
+
+<a href="tags/개인정보" class="card card-link">
+  <h3>개인정보</h3>
+  <span class="post-date">1</span>
 </a>
-<a href="/tags/생명윤리.html" class="card card-link">
-  <h3>#생명윤리</h3>
-  <span class="count">1 posts</span>
+
+<a href="tags/생명윤리" class="card card-link">
+  <h3>생명윤리</h3>
+  <span class="post-date">1</span>
 </a>
+
 </div>
       </main>
     </div>
@@ -38,7 +41,7 @@
     </footer>
 
     <script>
-      fetch("../assets/components/sidebar.html")
+      fetch("/assets/components/sidebar.html")
         .then(res => res.text())
         .then(html => {
           document.getElementById("sidebar-container").innerHTML = html;
