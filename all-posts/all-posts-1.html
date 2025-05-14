@@ -38,12 +38,6 @@
       <p>&copy; 2025 Luaru1. Powered by GitHub Pages.</p>
     </footer>
 
-    <script>
-      fetch("/assets/components/sidebar.html")
-        .then(res => res.text())
-        .then(html => {
-          document.getElementById("sidebar-container").innerHTML = html;
-        });
-    </script>
+    <script src="/assets/js/sidebar-load.js"></script>
   </body>
 </html>

@@ -5,23 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게놈 정보와 프라이버시</title>
     <link rel="stylesheet" href="/assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
 
     <link rel="icon" href="/assets/images/favicon/favicon.ico" type="image/x-icon">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
     <link rel="manifest" href="/assets/images/favicon/site.webmanifest">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script>hljs.highlightAll();</script>
-    <script>
-      fetch("/assets/components/sidebar.html")
-        .then(res => res.text())
-        .then(html => {
-          document.getElementById("sidebar-container").innerHTML = html;
-        });
-    </script>
   </head>
   <body>
     <div class="layout">
@@ -29,7 +18,7 @@
       <main class="content">
         <h1>게놈 정보와 프라이버시</h1>
         <p class="post-date">2024-10-18</p>
-        <div class="toc">
+<div class="toc">
 <ul>
 <li><a href="#_1">유전체 정보는 얼마나 민감한가?</a></li>
 <li><a href="#_2">연구 윤리적 고려</a></li>
@@ -58,38 +47,19 @@ sys.stdin = open('input.txt')
 def initial(sec):
     print('Hello World')
 </code></pre>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script src="/assets/js/code-copy.js"></script>
+<script src="/assets/js/toc-scroll.js"></script>
+<script src="/assets/js/history-fix.js"></script>
       </main>
     </div>
-
     <footer>
       <p>&copy; 2025 Luaru1. Powered by GitHub Pages.</p>
     </footer>
 
-    <script>
-      document.querySelectorAll('.codehilite').forEach(block => {
-        const button = document.createElement('button');
-        button.innerText = '복사';
-        button.className = 'copy-button';
-        button.onclick = () => {
-          const code = block.innerText;
-          navigator.clipboard.writeText(code);
-          button.innerText = '복사됨!';
-          setTimeout(() => button.innerText = '복사', 1500);
-        };
-        block.appendChild(button);
-      });
-
-      document.querySelectorAll('.toc a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href').substring(1);
-          const target = document.getElementById(targetId);
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
-            history.pushState(null, '', window.location.pathname + '#' + targetId);
-          }
-        });
-      });
-    </script>
+    <script src="/assets/js/sidebar-load.js"></script>
   </body>
 </html>

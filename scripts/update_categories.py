@@ -3,6 +3,7 @@ from string import Template
 from collections import defaultdict
 from utils.pagination import paginate, generate_pagination_links
 from utils.metadata import extract_metadata
+from utils.slug import slugify_name
 
 POSTS_DIR = Path("posts")
 OUTPUT_DIR = Path("categories")
@@ -58,6 +59,7 @@ def generate_category_pages():
     for cat, posts in categories.items():
         posts.sort(key=lambda x: x["date"], reverse=True)
         total_pages, get_page = paginate(posts, PER_PAGE)
+        cat = slugify_name(cat)
 
         for page in range(1, total_pages + 1):
             page_posts = get_page(page)
