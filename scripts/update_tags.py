@@ -3,6 +3,7 @@ from string import Template
 from collections import defaultdict
 from utils.pagination import paginate, generate_pagination_links
 from utils.metadata import extract_metadata
+from utils.slug import slugify_name
 
 POSTS_DIR = Path("posts")
 OUTPUT_DIR = Path("tags")
@@ -38,7 +39,7 @@ def generate_tag_pages():
     OUTPUT_DIR.mkdir(exist_ok=True)
 
     cards = "\n".join(
-        card_tpl.substitute(name=tag, count=len(posts))
+        card_tpl.substitute(url=f"/tags/{slugify_name(tag)}/{slugify_name(tag)}-1.html", name=tag, count=len(posts))
         for tag, posts in sorted(tags.items(), key=lambda x: len(x[1]), reverse=True)
     )
 
@@ -57,6 +58,9 @@ def generate_tag_pages():
         post_tpl = Template(f.read())
 
     for tag, posts in tags.items():
+        tag_dir = OUTPUT_DIR / slugify_name(tag)
+        tag_dir.mkdir(exist_ok=True)
+
         posts.sort(key=lambda x: x["date"], reverse=True)
         total_pages, get_page = paginate(posts, PER_PAGE)
 
@@ -72,7 +76,7 @@ def generate_tag_pages():
                 for post in page_posts
             )
 
-            pagination = generate_pagination_links(page, total_pages, f"/tags/{tag}")
+            pagination = generate_pagination_links(page, total_pages, f"{tag_dir}/{slugify_name(tag)}")
             grid_html = grid_tpl.substitute(cards=post_html, pagination=pagination)
 
             final_html = base_tpl.substitute(
@@ -81,7 +85,7 @@ def generate_tag_pages():
                 content=grid_html
             )
 
-            filename = f"{tag}.html" if page == 1 else f"{tag}-{page}.html"
-            (OUTPUT_DIR / filename).write_text(final_html, encoding="utf-8")
+            filename = f"{slugify_name(tag)}-{page}.html"
+            (tag_dir / filename).write_text(final_html, encoding="utf-8")
 
     print(f"태그 페이지 생성 완료: {len(tags)}개 태그")

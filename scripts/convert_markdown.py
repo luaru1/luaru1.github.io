@@ -1,8 +1,8 @@
 import markdown
 from pathlib import Path
 from string import Template
-from utils.metadata import extract_metadata
 from utils.post import get_all_posts
+from utils.slug import slugify_name
 
 POSTS_DIR = Path("posts")
 OUTPUT_DIR = Path("posts-html")
@@ -20,8 +20,11 @@ def convert_all_posts():
     posts = get_all_posts(POSTS_DIR)
 
     for meta in posts:
-        md_file = POSTS_DIR / meta["category"] / f"{meta['slug']}.md"
+        md_file = POSTS_DIR / slugify_name(meta["category"]) / f"{meta['slug']}.md"
+        html_dir = OUTPUT_DIR / slugify_name(meta["category"])
         html_file = Path(meta["url"].lstrip("/"))
+
+        html_dir.mkdir(exist_ok=True)
 
         if html_file.exists() and html_file.stat().st_mtime >= md_file.stat().st_mtime:
             continue

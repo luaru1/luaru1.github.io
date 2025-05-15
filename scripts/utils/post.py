@@ -1,4 +1,5 @@
 from utils.metadata import extract_metadata
+from utils.slug import slugify_name
 
 def get_all_posts(POSTS_DIR):
     posts = []
@@ -8,6 +9,6 @@ def get_all_posts(POSTS_DIR):
         for md_file in category_dir.glob("*.md"):
             meta = extract_metadata(md_file)
             if meta:
-                meta["url"] = f'/posts-html/{meta["category"]}/{meta["slug"]}.html'
+                meta["url"] = f'/posts-html/{slugify_name(meta["category"])}/{meta["slug"]}.html'
                 posts.append(meta)
     return sorted(posts, key=lambda x: x["date"], reverse=True)

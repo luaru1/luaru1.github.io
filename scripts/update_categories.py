@@ -7,6 +7,7 @@ from utils.slug import slugify_name
 
 POSTS_DIR = Path("posts")
 OUTPUT_DIR = Path("categories")
+OUTPUT_DIR.mkdir(exist_ok=True)
 INDEX_TEMPLATE = Path("template/card-item-template.html")
 BASE_TEMPLATE = Path("template/base-page-template.html")
 GRID_TEMPLATE = Path("template/card-grid-pagination-template.html")
@@ -22,7 +23,7 @@ def generate_category_pages():
         for md in cat_dir.glob("*.md"):
             meta = extract_metadata(md)
             if meta:
-                url = f"/posts-html/{meta['category']}/{meta['slug']}.html"
+                url = f"/posts-html/{slugify_name(meta['category'])}/{meta['slug']}.html"
                 categories[meta['category']].append({
                     "title": meta["title"],
                     "date": meta["date"],
@@ -35,10 +36,8 @@ def generate_category_pages():
     with open(BASE_TEMPLATE, encoding="utf-8") as f:
         base_tpl = Template(f.read())
 
-    OUTPUT_DIR.mkdir(exist_ok=True)
-
     cards = "\n".join(
-        card_tpl.substitute(name=cat, count=len(posts))
+        card_tpl.substitute(url=f"/categories/{slugify_name(cat)}/{slugify_name(cat)}-1.html", name=cat, count=len(posts))
         for cat, posts in sorted(categories.items(), key=lambda x: len(x[1]), reverse=True)
     )
 
@@ -57,9 +56,11 @@ def generate_category_pages():
         post_tpl = Template(f.read())
 
     for cat, posts in categories.items():
+        category_dir = OUTPUT_DIR / slugify_name(cat)
+        category_dir.mkdir(exist_ok=True)
+
         posts.sort(key=lambda x: x["date"], reverse=True)
         total_pages, get_page = paginate(posts, PER_PAGE)
-        cat = slugify_name(cat)
 
         for page in range(1, total_pages + 1):
             page_posts = get_page(page)
@@ -73,7 +74,7 @@ def generate_category_pages():
                 for p in page_posts
             )
 
-            pagination = generate_pagination_links(page, total_pages, f"/categories/{cat}")
+            pagination = generate_pagination_links(page, total_pages, f"{category_dir}/{slugify_name(cat)}")
             grid_html = grid_tpl.substitute(cards=post_html, pagination=pagination)
 
             final_html = base_tpl.substitute(
@@ -82,7 +83,7 @@ def generate_category_pages():
                 content=grid_html
             )
 
-            filename = f"{cat}.html" if page == 1 else f"{cat}-{page}.html"
-            (OUTPUT_DIR / filename).write_text(final_html, encoding="utf-8")
+            filename = f"{slugify_name(cat)}-{page}.html"
+            (category_dir / filename).write_text(final_html, encoding="utf-8")
 
     print(f"카테고리 페이지 생성 완료: {len(categories)}개 카테고리")

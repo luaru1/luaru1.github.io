@@ -16,6 +16,6 @@ def generate_pagination_links(current_page, total_pages, base_path):
         if i == current_page:
             links.append(f'<span class="current">{i}</span>')
         else:
-            url = f"{base_path}.html" if i == 1 else f"{base_path}-{i}.html"
+            url = f"{base_path}-{i}.html"
             links.append(f'<a href="{url}">{i}</a>')
     return '<div class="pagination">\n' + "\n".join(links) + "\n</div>"

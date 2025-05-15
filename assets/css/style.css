@@ -35,8 +35,21 @@ body {
 
 .site-title {
   font-size: 1.4rem;
-  margin-bottom: 2rem;
+  font-weight: bold;
   text-align: center;
+  margin: 1rem 0 1rem 0;
+  color: #333;
+  text-decoration: none;
+}
+
+a:has(.site-title) {
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+a:has(.site-title):hover {
+  color: inherit;
 }
 
 .nav-bar a {
